@@ -97,11 +97,9 @@ internal class ConsoleUI
 
     private void GetAllProducts_UI()
     {
-        Console.Clear();
-        DisplayMenuTitle("All Products");
-
         var allProducts = _productService.GetProducts();
         Console.Clear();
+        DisplayMenuTitle("All Products");
         if (allProducts.Any())
         {
             foreach (var product in allProducts)
@@ -119,13 +117,15 @@ internal class ConsoleUI
 
     private void GetOneProduct_UI()
     {
-        DisplayMenuTitle("Show Specific Product.");
+        DisplayMenuTitle("Show Specific Product");
 
         Console.Write("Enter the article number of the product: ");
         var articleNumber = Console.ReadLine();
 
         var productToView = _productService.GetProductByArticleNumber(articleNumber!);
         Console.Clear();
+
+        DisplayMenuTitle("Show Specific Product");
         if (productToView != null)
         {
             Console.WriteLine($"Article Number: {productToView.ArticleNumber}");
@@ -145,16 +145,62 @@ internal class ConsoleUI
     private void UpdateProduct_UI()
     {
         DisplayMenuTitle("Update Product");
-        Console.Write("Enter the article number of the product: ");
+        Console.Clear();
+        Console.Write("Enter the article number of the product to update: ");
         var articleNumber = Console.ReadLine();
 
+        var productToUpdate = _productService.GetProductByArticleNumber(articleNumber!);
+        Console.Clear();
+        DisplayMenuTitle("Update Product");
+        if (productToUpdate != null)
+        {
 
+            Console.Write("Enter the new title for the product: ");
+            var newTitle = Console.ReadLine();
 
+            Console.Write("Enter the new ingress for the product: ");
+            var newIngress = Console.ReadLine();
 
+            Console.Write("Enter the new description for the product: ");
+            var newDescription = Console.ReadLine();
 
+            Console.Write("Enter the new specifications for the product: ");
+            var newSpecifications = Console.ReadLine();
+
+            Console.Write("Enter the new price for the product: ");
+            var newPrice = Decimal.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter the new discount price for the product: ");
+            var newDiscountPrice = Decimal.Parse(Console.ReadLine()!);
+
+            Console.Write("Enter the new manufacturer name for the product: ");
+            var newManufacturerName = Console.ReadLine();
+
+            Console.Write("Enter the new category name name for the product: ");
+            var newCategoryName = Console.ReadLine();
+
+            productToUpdate.Title = newTitle!;
+            productToUpdate.Description.Ingress = newIngress!;
+            productToUpdate.Description.Description = newDescription!;
+            productToUpdate.Description.Specifications = newSpecifications!;
+            productToUpdate.PriceList.Price = newPrice!;
+            productToUpdate.PriceList.DiscountPrice = newDiscountPrice!;
+            productToUpdate.Manufacturer.ManufacturerName = newManufacturerName!;
+            productToUpdate.Category.CategoryName = newCategoryName!;
+
+            _productService.UpdateProduct(productToUpdate);
+
+            Console.WriteLine("Product updated successfully.");
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("Product not found.");
+        }
 
         DisplayPressAnyKey();
     }
+
 
     private void DeleteProduct_UI()
     {
